@@ -1,146 +1,156 @@
 import React, {useState, useEffect} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Table as AntdTable, Tag, Space} from 'antd';
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import '../App.css';
+import TextField from '@material-ui/core/TextField';
+import {
+  RowsProp,
+  DataGrid,
+  ColDef,
+  RowData,
+  SortModel,
+} from '@material-ui/data-grid';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 350,
+      height: 500,
       width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    },
+    searchField: {
+      width: '50%',
+      marginBottom: '1rem',
     },
   })
 );
+const rowData: RowData[] = [
+  {id: 1, username: 'tr', age: '14'},
+  {id: 2, username: 'ans', age: '16'},
+  {id: 3, username: 'trdw', age: '14'},
+  {id: 4, username: 'ansdwd', age: '16'},
+  {id: 5, username: 'tradd', age: '14'},
+  {id: 6, username: 'ansss', age: '16'},
+  {id: 7, username: 'trsss', age: '14'},
+  {id: 8, username: 'ansgg', age: '16'},
+  {id: 9, username: 'thhhfhfhr', age: '14'},
+  {id: 10, username: 'ansgs', age: '16'},
+  {id: 11, username: 'tffr', age: '14'},
+  {id: 12, username: 'anfdfs', age: '16'},
+];
+
+function loadServerRows(
+  sortModel: SortModel,
+  page: number,
+  data: any
+): Promise<any> {
+  return new Promise<any>(resolve => {
+    setTimeout(() => {
+      if (sortModel.length === 0) {
+        resolve(rowData.slice((page - 1) * 5, page * 5));
+        return;
+      }
+
+      const sortedColumn = sortModel[0];
+
+      let sortedRows = [
+        ...rowData.sort((a, b) =>
+          String(a[sortedColumn.field]).localeCompare(
+            String(b[sortedColumn.field])
+          )
+        ),
+      ];
+
+      if (sortModel[0].sort === 'desc') {
+        sortedRows = sortedRows.reverse();
+      }
+      resolve(sortedRows);
+    }, Math.random() * 500 + 100);
+  });
+}
 
 const DataGridComponent = () => {
   const classes = useStyles();
 
-  const columns: any[] = [
+  const columns: ColDef[] = [
+    {field: 'id', hide: true},
     {
-      title: 'Name',
-      dataIndex: 'name',
-      sorter: (a, b) => a.name.length - b.name.length,
-      filters: [
-        {
-          text: 'John',
-          value: 'John',
-        },
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Submenu',
-          value: 'Submenu',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      // specify the condition of filtering result
-      // here is that finding the name started with `value`
-      onFilter: (value: any, record: any) => record.name.indexOf(value) === 0,
-      key: 'name',
+      field: 'username',
+      headerName: 'Username',
+      description:
+        'The identification used by the person with access to the online service.',
     },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      sorter: (a, b) => a.age - b.age,
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (tags: any) => (
-        <>
-          {tags.map((tag: any) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: any) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
+    {field: 'age', headerName: 'Age'},
   ];
 
-  const data: any[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Joe Blac',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-      description: 'this is descrip',
-    },
-    {
-      key: '4',
-      name: 'Jim Black',
-      age: 52,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-      description: 'this is descrip',
-    },
-  ];
+  const [data, setData] = useState({
+    columns: columns,
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [rows, setRows] = useState<RowsProp>([]);
+  const [page, setPage] = useState(1);
+  const [sortModel, setSortModel] = useState<SortModel>([
+    {field: 'username', sort: 'asc'},
+  ]);
+
+  const handleSortModelChange = params => {
+    debugger;
+    if (params.sortModel !== sortModel) {
+      setSortModel(params.sortModel);
+    }
+  };
+
+  const handlePageChange = params => {
+    setPage(params.page);
+  };
+
+  useEffect(() => {
+    let active = true;
+
+    (async () => {
+      setLoading(true);
+      const newRows = await loadServerRows(sortModel, page, data);
+
+      if (!active) {
+        return;
+      }
+
+      setRows(newRows);
+      setLoading(false);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [sortModel, page, data]);
+
   return (
     <Container>
       <div className={classes.root}>
-        <AntdTable
-          columns={columns}
-          expandable={{
-            expandedRowRender: (record: any) => (
-              <p style={{margin: 0}}>{record.description}</p>
-            ),
-            rowExpandable: (record: any) => record.name !== 'Not Expandable',
-          }}
-          dataSource={data}
-          pagination={{pageSize: 3}}
+        <TextField
+          className={classes.searchField}
+          label="Search"
+          id="searchMovieField"
+          onChange={e => console.log(e.target.value)}
         />
+        <div style={{height: 1000, width: '100%'}}>
+          <DataGrid
+            rows={rows}
+            columns={data.columns}
+            pagination
+            pageSize={5}
+            rowCount={100}
+            sortingMode="server"
+            sortModel={sortModel}
+            onSortModelChange={handleSortModelChange}
+            paginationMode="server"
+            onPageChange={handlePageChange}
+            loading={loading}
+          />
+        </div>
       </div>
     </Container>
   );
