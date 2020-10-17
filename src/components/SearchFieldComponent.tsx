@@ -21,7 +21,7 @@ const SearchField = () => {
   return (
     <div>
       <TextField
-        variant="filled"
+        variant="outlined"
         className={classes.searchField}
         color="secondary"
         label="Search movie"
