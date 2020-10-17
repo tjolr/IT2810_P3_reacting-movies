@@ -1,17 +1,34 @@
 import { Movie } from './models/Movie';
 
+const movieResolver = async (_, args) => {
+  const { searchString = null, page = 1 } = args;
+  const limit = 10;
+
+  const searchQuery = {
+    title: { $regex: searchString, $options: 'i' },
+  };
+
+  const movies = await Movie.find(searchQuery, (err, movies) => {
+    if (err) throw err;
+    return movies;
+  })
+    .limit(limit)
+    .skip((page - 1) * limit);
+
+  const count = await Movie.countDocuments(searchQuery, (err, count) => {
+    if (err) throw err;
+    return count;
+  });
+  const totalPages = Math.ceil(count / limit);
+
+  return {
+    movies,
+    totalPages,
+  };
+};
+
 export const resolvers = {
   Query: {
-    getMovie: (_, { title }) =>
-      Movie.find({ title: title }, (err, movie) => {
-        if (err) throw err;
-        console.log({ ...movie });
-        return { ...movie };
-      }),
-    getMovies: () =>
-      Movie.find({}, (err, movies) => {
-        if (err) throw err;
-        return movies;
-      }),
+    Movie: movieResolver,
   },
 };

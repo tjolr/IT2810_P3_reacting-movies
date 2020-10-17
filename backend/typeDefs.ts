@@ -71,8 +71,12 @@ export const typeDefs = gql`
     crew: [Crew]
   }
 
+  type SearchResult {
+    movies: [Movie]
+    totalPages: Int
+  }
+
   type Query {
-    getMovie(title: String): [Movie]
-    getMovies: [Movie]
+    Movie(searchString: String, page: Int): SearchResult
   }
 `;
