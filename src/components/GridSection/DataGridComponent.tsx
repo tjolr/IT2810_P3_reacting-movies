@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  forwardRef,
-  useRef,
-  useImperativeHandle,
-} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import '../../App.css';
 import {
   RowsProp,
@@ -18,8 +11,10 @@ import {
 import {useSelector} from 'react-redux';
 import {motion} from 'framer-motion';
 import DetailViewModal from './DetailView.Modal';
-
-// Filtrere på release_date, vote_average, spoken_language
+import {useQuery, gql} from '@apollo/client';
+import {Typography} from '@material-ui/core';
+import {buildQuery} from '../../fetch/QueryBuilder';
+import {columnDefs} from './Columns';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,25 +89,15 @@ function loadServerRows(
 
 const DataGridComponent = () => {
   const classes = useStyles();
+  const [rowDataState, setRowDataState] = useState<RowsProp>([]);
+
   const detailViewChildRef = useRef<any>(null);
   const [detailViewParams, setDetailViewParams] = useState(null);
-
   const searchFieldValue = useSelector(state => state.searchField.content);
 
-  const columns: ColDef[] = [
-    {field: 'id', hide: true},
-    {
-      field: 'username',
-      headerName: 'Username',
-    },
-    {field: 'age', headerName: 'Age'},
-  ];
-
-  const [data] = useState({
-    columns: columns,
+  const [data2] = useState({
+    columns: columnDefs,
   });
-  const [rows, setRows] = useState<RowsProp>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const [sortModel, setSortModel] = useState<SortModel>([
     {field: 'username', sort: 'asc'},
@@ -135,24 +120,17 @@ const DataGridComponent = () => {
   };
 
   useEffect(() => {
-    let active = true;
+    console.log('searchFieldValue:', searchFieldValue);
+  }, [searchFieldValue]);
+  const {loading, error, data} = useQuery(buildQuery(searchFieldValue));
 
-    (async () => {
-      setLoading(true);
-      const newRows = await loadServerRows(sortModel, page, searchFieldValue);
-
-      if (!active) {
-        return;
-      }
-
-      setRows(newRows);
-      setLoading(false);
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [sortModel, page, searchFieldValue]);
+  if (error)
+    return (
+      <div>
+        <h2>Error while loading data!</h2>
+        Reason: ${error.message}
+      </div>
+    );
 
   return (
     <motion.div
@@ -163,8 +141,8 @@ const DataGridComponent = () => {
     >
       <div style={{height: 1000, width: '100%'}}>
         <DataGrid
-          rows={rows}
-          columns={data.columns}
+          rows={loading ? [] : data.Movie.movies}
+          columns={data2.columns}
           pagination
           pageSize={5}
           rowCount={100}

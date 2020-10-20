@@ -56,11 +56,9 @@ const DetailViewModal = forwardRef((props: any, ref) => {
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 id="transition-modal-title">
-              {props.detailViewParams && props.detailViewParams.username}
+              {props.detailViewParams && props.detailViewParams.title}
             </h2>
-            <p id="transition-modal-description">
-              {props.detailViewParams && props.detailViewParams.age}
-            </p>
+
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
               aliquam tincidunt orci. Vivamus mattis vel libero consequat

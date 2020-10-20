@@ -11,7 +11,6 @@ import {motion} from 'framer-motion';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     filterSection: {
-      width: '100%',
       backgroundColor: theme.palette.primary.light,
       borderRadius: '.3rem',
       padding: '.8rem',
