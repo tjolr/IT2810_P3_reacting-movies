@@ -71,12 +71,18 @@ export const typeDefs = gql`
     crew: [Crew]
   }
 
+  input RatingFilter {
+    rating_from: Float
+    rating_to: Float
+  }
+
   type SearchResult {
     movies: [Movie]
     totalPages: Int
+    totalRowCount: Int
   }
 
   type Query {
-    Movie(searchString: String, page: Int): SearchResult
+    Movie(searchString: String, page: Int, rating: RatingFilter): SearchResult
   }
 `;
