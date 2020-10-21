@@ -1,28 +1,55 @@
-import { Movie } from './models/Movie';
+import { MovieModel, Movie } from './models/Movie';
 
-const movieResolver = async (_, args) => {
+const movieResolver = async (_, args: MovieArgs) => {
   // Set default values, and overwrite with the args
   const searchString = args.searchString || '';
   const page = args.page || 1;
-  const rating = args.rating || { rating_from: 0, rating_to: 10 };
+  const filter = args.filter || null;
 
   const limit = 10;
 
-  const searchQuery = {
+  // Set up the basic search query
+  let searchQuery: MovieSearchQuery = {
     title: { $regex: searchString, $options: 'i' },
-    vote_average: { $gte: rating.rating_from, $lte: rating.rating_to },
   };
 
-  const movies = await Movie.find(searchQuery, (err, movies) => {
-    if (err) throw err;
-    return movies;
-  })
-    .limit(limit)
-    .skip((page - 1) * limit);
+  // Apply rating filter if present
+  if (filter.rating) {
+    searchQuery = {
+      ...searchQuery,
+      vote_average: {
+        $gte: filter.rating.from,
+        $lte: filter.rating.to,
+      },
+    };
+  }
 
-  const totalRowCount = await Movie.countDocuments(
+  // Apply release-year filter if present
+  if (filter.release_year) {
+    searchQuery = {
+      ...searchQuery,
+      release_date: {
+        $gte: new Date(String(filter.release_year.from)),
+        $lt: new Date(String(filter.release_year.to + 1)),
+      },
+    };
+  }
+
+  // Get the movies that match the searchQuery from the database
+  const movies = await MovieModel.find(
     searchQuery,
-    (err, count) => {
+    (err: any, movies: Movie[]) => {
+      if (err) throw err;
+      return movies;
+    }
+  )
+    .limit(limit) // Results per page limit
+    .skip((page - 1) * limit); // Skip results to get to correct page
+
+  // Count result of searchQuery to get number of rows and number of pages
+  const totalRowCount: number = await MovieModel.countDocuments(
+    searchQuery,
+    (err: any, count: number) => {
       if (err) throw err;
       return count;
     }
@@ -41,3 +68,24 @@ export const resolvers = {
     Movie: movieResolver,
   },
 };
+
+interface MovieArgs {
+  searchString?: string;
+  page?: number;
+  filter?: {
+    rating: {
+      from: number;
+      to: number;
+    };
+    release_year: {
+      from: number;
+      to: number;
+    };
+  };
+}
+
+interface MovieSearchQuery {
+  title: object;
+  vote_average?: object;
+  release_date?: object;
+}

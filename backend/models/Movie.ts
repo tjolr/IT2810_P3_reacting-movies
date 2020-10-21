@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+import { Schema, model, Document, Model } from 'mongoose';
+
+// SCHEMA
 
 const GenreSchema = new Schema({
   id: Number,
@@ -70,4 +71,77 @@ const movieSchema = new Schema({
   crew: [CrewSchema],
 });
 
-export const Movie = mongoose.model('Movie', movieSchema);
+// INTERFACE
+
+interface Genre {
+  id: number;
+  name: string;
+}
+
+interface Keyword {
+  id: number;
+  name: string;
+}
+
+interface ProductionCompany {
+  id: number;
+  name: string;
+}
+
+interface ProductionCountry {
+  iso_3166_1: number;
+  name: string;
+}
+
+interface SpokenLanguage {
+  iso_639_1: number;
+  name: string;
+}
+
+interface Cast {
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  gender: number;
+  id: number;
+  name: string;
+  order: number;
+}
+
+interface Crew {
+  credit_id: string;
+  department: string;
+  gender: number;
+  id: number;
+  job: string;
+  name: string;
+}
+
+export interface Movie extends Document {
+  budget: number;
+  genres: Genre[];
+  homepage: string;
+  id: number;
+  keywords: Keyword[];
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
+  release_date: Date;
+  revenue: number;
+  runtime: number;
+  spoken_languages: SpokenLanguage[];
+  status: string;
+  tagline: string;
+  title: string;
+  vote_average: number;
+  vote_count: number;
+  cast: Cast[];
+  crew: Crew[];
+}
+
+// EXPORT
+
+export const MovieModel: Model<Movie> = model<Movie>('Movie', movieSchema);

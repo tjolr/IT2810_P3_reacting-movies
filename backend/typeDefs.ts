@@ -58,7 +58,7 @@ export const typeDefs = gql`
     popularity: Float
     production_companies: [ProductionCompany]
     production_countries: [ProductionCountry]
-    release_date: String
+    release_date: Float
     revenue: Int
     runtime: Int
     spoken_languages: [SpokenLanguage]
@@ -72,8 +72,18 @@ export const typeDefs = gql`
   }
 
   input RatingFilter {
-    rating_from: Float
-    rating_to: Float
+    from: Float
+    to: Float
+  }
+
+  input ReleaseYearFilter {
+    from: Int
+    to: Int
+  }
+
+  input Filter {
+    rating: RatingFilter
+    release_year: ReleaseYearFilter
   }
 
   type SearchResult {
@@ -83,6 +93,6 @@ export const typeDefs = gql`
   }
 
   type Query {
-    Movie(searchString: String, page: Int, rating: RatingFilter): SearchResult
+    Movie(searchString: String, page: Int, filter: Filter): SearchResult
   }
 `;
