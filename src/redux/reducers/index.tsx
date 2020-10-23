@@ -1,4 +1,4 @@
 import {combineReducers} from 'redux';
-import searchField from './searchField';
+import movieReducer from './movie.reducer';
 
-export default combineReducers({searchField});
+export default combineReducers({movieReducer});

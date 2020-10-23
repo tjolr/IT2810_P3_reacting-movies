@@ -1,7 +1,33 @@
-import {UPDATE_SEARCH_FIELD} from './actionTypes';
+import {
+  UPDATE_SEARCH_FIELD,
+  CHANGE_PAGE,
+  UPDATE_RELEASE_YEAR,
+  UPDATE_RATING,
+} from './actionTypes';
 
 export const updateSearch = content => ({
   type: UPDATE_SEARCH_FIELD,
+  payload: {
+    content,
+  },
+});
+
+export const changePage = content => ({
+  type: CHANGE_PAGE,
+  payload: {
+    content,
+  },
+});
+
+export const updateReleaseYear = content => ({
+  type: UPDATE_RELEASE_YEAR,
+  payload: {
+    content,
+  },
+});
+
+export const updateRating = content => ({
+  type: UPDATE_RATING,
   payload: {
     content,
   },

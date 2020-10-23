@@ -3,6 +3,8 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import clsx from 'clsx';
+import {useDispatch} from 'react-redux';
+import {updateRating} from '../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,10 +37,16 @@ function valuetext(value: number) {
 
 const RangeSliderVoteAvg = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const [value, setValue] = useState<number[]>([0, 10]);
 
   const handleChange = (event: any, newValue: number | number[]) => {
     setValue(newValue as number[]);
+  };
+
+  const handleChangeCommitted = (event: any, newValue: number | number[]) => {
+    dispatch(updateRating(newValue as number[]));
   };
 
   return (
@@ -56,6 +64,7 @@ const RangeSliderVoteAvg = () => {
       <Slider
         value={value}
         onChange={handleChange}
+        onChangeCommitted={handleChangeCommitted}
         valueLabelDisplay="auto"
         aria-labelledby="range-slider"
         getAriaValueText={valuetext}

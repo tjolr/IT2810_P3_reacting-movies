@@ -1,7 +1,5 @@
 import React from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-import {useDispatch} from 'react-redux';
-import {updateSearch} from '../../redux/actions';
 import RangeSlider from './RangeSlider.ReleaseDate';
 import MultipleSelect from './MultipleSelect.SpokenLang';
 import {Typography} from '@material-ui/core';

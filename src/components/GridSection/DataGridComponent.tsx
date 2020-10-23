@@ -1,20 +1,15 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import '../../App.css';
-import {
-  RowsProp,
-  DataGrid,
-  ColDef,
-  RowData,
-  SortModel,
-} from '@material-ui/data-grid';
+import {DataGrid, SortModel} from '@material-ui/data-grid';
 import {useSelector} from 'react-redux';
 import {motion} from 'framer-motion';
 import DetailViewModal from './DetailView.Modal';
-import {useQuery, gql} from '@apollo/client';
-import {Typography} from '@material-ui/core';
+import {useQuery} from '@apollo/client';
 import {buildQuery} from '../../fetch/QueryBuilder';
 import {columnDefs} from './Columns';
+import {useDispatch} from 'react-redux';
+import {changePage} from '../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,72 +28,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const rowData: RowData[] = [
-  {id: 1, username: 'tr', age: '2'},
-  {id: 2, username: 'ans', age: '5'},
-  {id: 3, username: 'trdw', age: '14'},
-  {id: 4, username: 'ansdwd', age: '71'},
-  {id: 5, username: 'tradd', age: '14'},
-  {id: 6, username: 'ansss', age: '16'},
-  {id: 7, username: 'trsss', age: '4'},
-  {id: 8, username: 'ansgg', age: '7'},
-  {id: 9, username: 'thhfhr', age: '14'},
-  {id: 10, username: 'ansgs', age: '16'},
-  {id: 11, username: 'tffr', age: '46'},
-  {id: 12, username: 'anfdfs', age: '68'},
-];
-
-function loadServerRows(
-  sortModel: SortModel,
-  page: number,
-  searchFieldValue: String
-): Promise<any> {
-  return new Promise<any>(resolve => {
-    setTimeout(() => {
-      if (searchFieldValue && searchFieldValue.length > 0) {
-        const matchingRows = rowData.filter(row =>
-          row.username.includes(searchFieldValue)
-        );
-
-        resolve(matchingRows);
-        return;
-      }
-
-      if (sortModel.length === 0) {
-        resolve(rowData.slice((page - 1) * 5, page * 5));
-        return;
-      }
-
-      const sortedColumn = sortModel[0];
-
-      let sortedRows = [
-        ...rowData.sort((a, b) =>
-          String(a[sortedColumn.field]).localeCompare(
-            String(b[sortedColumn.field])
-          )
-        ),
-      ];
-
-      if (sortModel[0].sort === 'desc') {
-        sortedRows = sortedRows.reverse();
-      }
-      resolve(sortedRows);
-    }, Math.random() * 500 + 100);
-  });
-}
-
 const DataGridComponent = () => {
   const classes = useStyles();
-  const [rowDataState, setRowDataState] = useState<RowsProp>([]);
+  const dispatch = useDispatch();
+  const pageSize = 10;
 
   const detailViewChildRef = useRef<any>(null);
   const [detailViewParams, setDetailViewParams] = useState(null);
-  const searchFieldValue = useSelector(state => state.searchField.content);
+  const searchStringRedux = useSelector(
+    state => state.movieReducer.searchString
+  );
+  const pageRedux = useSelector(state => state.movieReducer.page);
+  const filterRedux = useSelector(state => state.movieReducer.filter);
 
-  const [data2] = useState({
-    columns: columnDefs,
+  const [rowCount, setRowCount] = useState({
+    active: 0,
+    prev: 4800,
   });
-  const [page, setPage] = useState(1);
+
   const [sortModel, setSortModel] = useState<SortModel>([
     {field: 'username', sort: 'asc'},
   ]);
@@ -110,19 +57,33 @@ const DataGridComponent = () => {
   };
 
   const handlePageChange = params => {
-    setPage(params.page);
+    dispatch(changePage(params.page));
   };
 
   const onRowClick = (e: any) => {
-    console.log(e);
     setDetailViewParams(e.data);
     detailViewChildRef.current.toggleDetailView();
   };
 
+  const {loading, error, data} = useQuery(buildQuery(), {
+    variables: {
+      searchString: searchStringRedux !== undefined ? searchStringRedux : '',
+      page: pageRedux,
+      filter: filterRedux,
+    },
+  });
+
   useEffect(() => {
-    console.log('searchFieldValue:', searchFieldValue);
-  }, [searchFieldValue]);
-  const {loading, error, data} = useQuery(buildQuery(searchFieldValue));
+    const tmpRowCount = {...rowCount};
+    if (data === undefined) {
+      tmpRowCount.active = tmpRowCount.prev;
+    } else {
+      tmpRowCount.active = data.Movie.totalRowCount;
+      tmpRowCount.prev = data.Movie.totalRowCount;
+    }
+
+    setRowCount(tmpRowCount);
+  }, [data]);
 
   if (error)
     return (
@@ -142,15 +103,17 @@ const DataGridComponent = () => {
       <div style={{height: 1000, width: '100%'}}>
         <DataGrid
           rows={loading ? [] : data.Movie.movies}
-          columns={data2.columns}
+          rowHeight={42}
+          columns={columnDefs}
           pagination
-          pageSize={5}
-          rowCount={100}
+          pageSize={pageSize}
+          page={pageRedux}
+          rowCount={rowCount.active}
+          paginationMode="server"
+          onPageChange={handlePageChange}
           sortingMode="server"
           sortModel={sortModel}
           onSortModelChange={handleSortModelChange}
-          paginationMode="server"
-          onPageChange={handlePageChange}
           onRowClick={onRowClick}
           loading={loading}
         />
