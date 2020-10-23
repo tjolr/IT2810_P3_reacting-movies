@@ -1,4 +1,5 @@
 import {ColDef} from '@material-ui/data-grid';
+import {getLanguageName} from '../../utils/isoLanguages';
 
 export const columnDefs: ColDef[] = [
   {field: 'id', hide: true},
@@ -18,6 +19,7 @@ export const columnDefs: ColDef[] = [
     field: 'original_language',
     headerName: 'Original lang.',
     width: 120,
+    valueFormatter: ({value}: any) => getLanguageName(value),
   },
   {
     field: 'popularity',
@@ -26,6 +28,7 @@ export const columnDefs: ColDef[] = [
   {
     field: 'revenue',
     headerName: 'revenue',
+    width: 110,
   },
   {
     field: 'runtime',
