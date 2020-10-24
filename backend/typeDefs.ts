@@ -59,7 +59,7 @@ export const typeDefs = gql`
     production_companies: [ProductionCompany]
     production_countries: [ProductionCountry]
     release_date: Float
-    revenue: Int
+    revenue: Float
     runtime: Int
     spoken_languages: [SpokenLanguage]
     status: String
