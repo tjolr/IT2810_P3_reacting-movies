@@ -110,4 +110,14 @@ export const typeDefs = gql`
       sort: Sort
     ): SearchResult
   }
+
+  input Review {
+    movie_id: String
+    text: String
+    author: String
+  }
+
+  type Mutation {
+    addReview(review: Review): Boolean
+  }
 `;

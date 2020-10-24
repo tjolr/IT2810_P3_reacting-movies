@@ -142,6 +142,6 @@ export interface Movie extends Document {
   crew: Crew[];
 }
 
-// EXPORT
+// MODEL
 
 export const MovieModel: Model<Movie> = model<Movie>('Movie', movieSchema);

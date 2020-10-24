@@ -1,4 +1,5 @@
 import { MovieModel, Movie } from './models/Movie';
+import { ReviewModel } from './models/Review';
 
 const movieResolver = async (_, args: MovieArgs) => {
   // Set default values, and overwrite with the args
@@ -68,9 +69,27 @@ const movieResolver = async (_, args: MovieArgs) => {
   };
 };
 
+const reviewMutation = async (_, args: ReviewArgs) => {
+  try {
+    console.log(args);
+    const newReview = await ReviewModel.create({
+      movie_id: args.review.movie_id,
+      text: args.review.text,
+      author: args.review.author,
+    });
+    console.log(newReview);
+    return newReview ? true : false;
+  } catch (e) {
+    throw e;
+  }
+};
+
 export const resolvers = {
   Query: {
     Movie: movieResolver,
+  },
+  Mutation: {
+    addReview: reviewMutation,
   },
 };
 
@@ -90,6 +109,14 @@ interface MovieArgs {
   sort?: {
     field: string;
     direction: string;
+  };
+}
+
+interface ReviewArgs {
+  review: {
+    movie_id: string;
+    text: string;
+    author: string;
   };
 }
 
