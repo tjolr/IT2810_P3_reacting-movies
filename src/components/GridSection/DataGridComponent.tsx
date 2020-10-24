@@ -9,7 +9,7 @@ import {useQuery} from '@apollo/client';
 import {buildMovieQuery} from '../../fetch/QueryBuilder';
 import {columnDefs} from './Columns';
 import {useDispatch} from 'react-redux';
-import {changePage} from '../../redux/actions';
+import {changePage, updateSort} from '../../redux/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,6 +40,7 @@ const DataGridComponent = () => {
   );
   const pageRedux = useSelector(state => state.movieReducer.page);
   const filterRedux = useSelector(state => state.movieReducer.filter);
+  const sortRedux = useSelector(state => state.movieReducer.sort);
 
   const [rowCount, setRowCount] = useState({
     active: 0,
@@ -51,10 +52,10 @@ const DataGridComponent = () => {
   ]);
 
   const handleSortModelChange = params => {
-    console.log('handleSortModelChange');
     /* if (params.sortModel !== sortModel) {
       setSortModel(params.sortModel);
     } */
+    dispatch(updateSort(params.sortModel[0]));
   };
 
   const handlePageChange = params => {
@@ -71,6 +72,7 @@ const DataGridComponent = () => {
       searchString: searchStringRedux !== undefined ? searchStringRedux : '',
       page: pageRedux,
       filter: filterRedux,
+      sort: sortRedux,
     },
   });
 
@@ -112,9 +114,10 @@ const DataGridComponent = () => {
           rowCount={rowCount.active}
           paginationMode="server"
           onPageChange={handlePageChange}
-          /* sortingMode="server"
-          sortModel={sortModel}
-          onSortModelChange={handleSortModelChange} */
+          sortingMode="server"
+          sortModel={sortRedux}
+          onSortModelChange={handleSortModelChange}
+          disableSelectionOnClick={true}
           onRowClick={onRowClick}
           loading={loading}
         />

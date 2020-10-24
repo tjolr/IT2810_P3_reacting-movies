@@ -3,6 +3,7 @@ import {
   CHANGE_PAGE,
   UPDATE_RELEASE_YEAR,
   UPDATE_RATING,
+  UPDATE_SORT,
 } from '../actionTypes';
 
 export const initMovieState = {
@@ -17,6 +18,10 @@ export const initMovieState = {
       from: 1916,
       to: 2020,
     },
+  },
+  sort: {
+    field: 'popularity',
+    direction: 'desc',
   },
 };
 
@@ -53,6 +58,15 @@ const movieReducer = (state = initMovieState, action) => {
             from: action.payload.content[0],
             to: action.payload.content[1],
           },
+        },
+      };
+    case UPDATE_SORT:
+      return {
+        ...state,
+        page: 1,
+        sort: {
+          field: action.payload.field,
+          direction: action.payload.sort,
         },
       };
     default:

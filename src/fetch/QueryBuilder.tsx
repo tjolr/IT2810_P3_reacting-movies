@@ -7,17 +7,17 @@ export const buildMovieQuery = () => {
   const fieldString = fields.join('\n');
 
   const query = gql`
-    query($searchString: String, $page: Int, $filter: Filter) {
+    query($searchString: String, $page: Int, $filter: Filter, $sort: Sort) {
       Movie(
         searchString: $searchString
         page: $page
         filter: $filter
+        sort: $sort
       ) {
         movies {
           ${fieldString}
         }
         totalRowCount 
-
       }
     }
   `;

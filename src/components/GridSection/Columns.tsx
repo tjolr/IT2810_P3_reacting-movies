@@ -27,8 +27,9 @@ export const columnDefs: ColDef[] = [
   },
   {
     field: 'revenue',
-    headerName: 'revenue',
-    width: 110,
+    headerName: 'Revenue',
+    type: 'number',
+    width: 160,
   },
   {
     field: 'runtime',

@@ -3,6 +3,7 @@ import {
   CHANGE_PAGE,
   UPDATE_RELEASE_YEAR,
   UPDATE_RATING,
+  UPDATE_SORT,
 } from './actionTypes';
 
 export const updateSearch = content => ({
@@ -30,5 +31,13 @@ export const updateRating = content => ({
   type: UPDATE_RATING,
   payload: {
     content,
+  },
+});
+
+export const updateSort = content => ({
+  type: UPDATE_SORT,
+  payload: {
+    field: content ? content.field : 'popularity',
+    sort: content ? content.sort : 'desc',
   },
 });
