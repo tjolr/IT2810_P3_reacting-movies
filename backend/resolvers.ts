@@ -5,6 +5,7 @@ const movieResolver = async (_, args: MovieArgs) => {
   const searchString = args.searchString || '';
   const page = args.page || 1;
   const filter = args.filter || null;
+  const sort = args.sort || { field: 'popularity', direction: 'desc' };
 
   const limit = 10;
 
@@ -35,6 +36,9 @@ const movieResolver = async (_, args: MovieArgs) => {
     };
   }
 
+  // Sortstring is fieldname with '-' in from when descending
+  const sortString = `${SortPrefix[sort.direction]}${sort.field}`;
+
   // Get the movies that match the searchQuery from the database
   const movies = await MovieModel.find(
     searchQuery,
@@ -44,7 +48,8 @@ const movieResolver = async (_, args: MovieArgs) => {
     }
   )
     .limit(limit) // Results per page limit
-    .skip((page - 1) * limit); // Skip results to get to correct page
+    .skip((page - 1) * limit) // Skip results to get to correct page
+    .sort(sortString); // Apply the sorting
 
   // Count result of searchQuery to get number of rows and number of pages
   const totalRowCount: number = await MovieModel.countDocuments(
@@ -82,10 +87,19 @@ interface MovieArgs {
       to: number;
     };
   };
+  sort?: {
+    field: string;
+    direction: string;
+  };
 }
 
 interface MovieSearchQuery {
   title: object;
   vote_average?: object;
   release_date?: object;
+}
+
+enum SortPrefix {
+  'asc' = '',
+  'desc' = '-',
 }

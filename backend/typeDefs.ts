@@ -86,6 +86,16 @@ export const typeDefs = gql`
     release_year: ReleaseYearFilter
   }
 
+  input Sort {
+    field: String
+    direction: SortDirection
+  }
+
+  enum SortDirection {
+    asc
+    desc
+  }
+
   type SearchResult {
     movies: [Movie]
     totalPages: Int
@@ -93,6 +103,11 @@ export const typeDefs = gql`
   }
 
   type Query {
-    Movie(searchString: String, page: Int, filter: Filter): SearchResult
+    Movie(
+      searchString: String
+      page: Int
+      filter: Filter
+      sort: Sort
+    ): SearchResult
   }
 `;
