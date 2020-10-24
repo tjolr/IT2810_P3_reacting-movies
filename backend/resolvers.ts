@@ -14,7 +14,7 @@ const movieResolver = async (_, args: MovieArgs) => {
   };
 
   // Apply rating filter if present
-  if (filter.rating) {
+  if (filter && filter.rating) {
     searchQuery = {
       ...searchQuery,
       vote_average: {
@@ -25,7 +25,7 @@ const movieResolver = async (_, args: MovieArgs) => {
   }
 
   // Apply release-year filter if present
-  if (filter.release_year) {
+  if (filter && filter.release_year) {
     searchQuery = {
       ...searchQuery,
       release_date: {
