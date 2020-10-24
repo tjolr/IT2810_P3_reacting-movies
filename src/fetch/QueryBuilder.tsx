@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import {columnDefs} from '../components/GridSection/Columns';
 
-export const buildQuery = () => {
+export const buildMovieQuery = () => {
   const fields: string[] = [];
   columnDefs.map(columnDef => fields.push(columnDef.field));
   const fieldString = fields.join('\n');
@@ -18,6 +18,20 @@ export const buildQuery = () => {
         }
         totalRowCount 
 
+      }
+    }
+  `;
+
+  return query;
+};
+
+export const buildDetailMovieQuery = () => {
+  const query = gql`
+    query($searchString: String) {
+      Movie(searchString: $searchString) {
+        movies {
+          overview
+        }
       }
     }
   `;

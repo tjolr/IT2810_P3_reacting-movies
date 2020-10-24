@@ -5,7 +5,7 @@ import {
   UPDATE_RATING,
 } from '../actionTypes';
 
-const initState = {
+export const initMovieState = {
   searchString: '',
   page: 1,
   filter: {
@@ -20,7 +20,7 @@ const initState = {
   },
 };
 
-const movieReducer = (state = initState, action) => {
+const movieReducer = (state = initMovieState, action) => {
   switch (action.type) {
     case UPDATE_SEARCH_FIELD:
       return {

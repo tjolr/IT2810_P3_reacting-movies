@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       [theme.breakpoints.down('sm')]: {
-        minWidth: 350,
-        maxWidth: 500,
+        minWidth: '80vw',
       },
       [theme.breakpoints.up('md')]: {
         minWidth: 200,

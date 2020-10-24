@@ -3,75 +3,159 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import {Typography} from '@material-ui/core';
+import {getDateInYearString} from '../../utils/dates';
+import {getLanguageName} from '../../utils/isoLanguages';
+import {useQuery} from '@apollo/client';
+import {buildDetailMovieQuery} from '../../fetch/QueryBuilder';
+import {initMovieState} from '../../redux/reducers/movie.reducer';
+import Skeleton from '@material-ui/lab/Skeleton';
+import CloseIcon from '@material-ui/icons/Close';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      [theme.breakpoints.down('sm')]: {
+        marginTop: '10vh',
+        overflow: 'scroll',
+        maxHeight: '80vh',
+        width: '97vw',
+        margin: 'auto',
+      },
+      [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     },
     paper: {
       backgroundColor: theme.palette.background.paper,
       borderRadius: '8px',
       boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-      maxWidth: '60vw',
+      [theme.breakpoints.down('sm')]: {
+        padding: theme.spacing(1),
+      },
+      [theme.breakpoints.up('md')]: {
+        width: '60vw',
+        padding: theme.spacing(4),
+      },
+    },
+    closeButton: {
+      marginTop: theme.spacing(1),
+      display: 'block',
+      margin: 'auto',
     },
   })
 );
 
 const DetailViewModal = forwardRef((props: any, ref) => {
+  const classes = useStyles();
   useImperativeHandle(ref, () => ({
     toggleDetailView() {
       open ? handleClose() : handleOpen();
     },
   }));
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
-    console.log(props.detailViewParams);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2 id="transition-modal-title">
-              {props.detailViewParams && props.detailViewParams.title}
-            </h2>
+  const {loading, error, data} = useQuery(buildDetailMovieQuery(), {
+    variables: {
+      searchString:
+        props.detailViewParams != null ? props.detailViewParams.title : '',
+    },
+  });
 
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              aliquam tincidunt orci. Vivamus mattis vel libero consequat
-              eleifend. Nullam tincidunt libero felis, nec luctus turpis auctor
-              id. Integer tortor nibh, mattis sed feugiat sed, luctus id mi. Sed
-              in sem pretium, dignissim nisi vitae, rhoncus est. Duis nibh orci,
-              rutrum sed massa ac, malesuada hendrerit lectus. Sed dictum turpis
-              ipsum, sit amet congue lorem varius eu.{' '}
-            </p>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+  return (
+    <Modal
+      className={classes.modal}
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500,
+      }}
+    >
+      <Fade in={open}>
+        <div className={classes.paper}>
+          {props.detailViewParams && (
+            <div>
+              {props.detailViewParams.title && (
+                <Typography variant="h5">
+                  {props.detailViewParams.title}
+                </Typography>
+              )}
+              <br />
+
+              {loading ? (
+                <div>
+                  <Skeleton animation="wave" width={450} height={22} />
+                  <br />
+                  <Skeleton animation="wave" width={200} height={22} />
+                  <Skeleton animation="wave" width={200} height={22} />
+                  <Skeleton animation="wave" width={200} height={22} />
+                  <br />
+                  <Skeleton animation="wave" height={90} />
+                  <br />
+                </div>
+              ) : (
+                <div>
+                  {props.detailViewParams.tagline && (
+                    <Typography variant="subtitle1">
+                      "<i>{props.detailViewParams.tagline}</i>"
+                    </Typography>
+                  )}
+                  <br />
+
+                  {props.detailViewParams.release_date && (
+                    <Typography variant="subtitle1">
+                      <b>Release date:</b>{' '}
+                      {getDateInYearString(
+                        new Date(props.detailViewParams.release_date)
+                      )}
+                    </Typography>
+                  )}
+                  {props.detailViewParams.vote_average && (
+                    <Typography variant="subtitle1">
+                      <b>Average vote:</b> {props.detailViewParams.vote_average}
+                    </Typography>
+                  )}
+                  {props.detailViewParams.original_language && (
+                    <Typography variant="subtitle1">
+                      <b>Original language:</b>{' '}
+                      {getLanguageName(
+                        props.detailViewParams.original_language
+                      )}
+                    </Typography>
+                  )}
+                  <br />
+                  {data && (
+                    <Typography variant="body1">
+                      {data.Movie.movies[0].overview}
+                    </Typography>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          <IconButton
+            onClick={handleClose}
+            size="small"
+            className={classes.closeButton}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
+      </Fade>
+    </Modal>
   );
 });
 

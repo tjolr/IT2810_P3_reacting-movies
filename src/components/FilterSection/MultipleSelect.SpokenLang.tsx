@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       margin: theme.spacing(1),
       [theme.breakpoints.down('sm')]: {
-        minWidth: 350,
+        minWidth: '80vw',
         maxWidth: 400,
       },
       [theme.breakpoints.up('md')]: {

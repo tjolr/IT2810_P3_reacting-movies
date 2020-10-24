@@ -7,7 +7,7 @@ import DataGridComponent from './GridSection/DataGridComponent';
 
 const MainSection = () => {
   return (
-    <Container>
+    <Container style={{marginBottom: '2rem'}}>
       <Info />
       <SearchField />
       <Filters />

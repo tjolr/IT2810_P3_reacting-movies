@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 import {motion} from 'framer-motion';
 import DetailViewModal from './DetailView.Modal';
 import {useQuery} from '@apollo/client';
-import {buildQuery} from '../../fetch/QueryBuilder';
+import {buildMovieQuery} from '../../fetch/QueryBuilder';
 import {columnDefs} from './Columns';
 import {useDispatch} from 'react-redux';
 import {changePage} from '../../redux/actions';
@@ -51,9 +51,10 @@ const DataGridComponent = () => {
   ]);
 
   const handleSortModelChange = params => {
-    if (params.sortModel !== sortModel) {
+    console.log('handleSortModelChange');
+    /* if (params.sortModel !== sortModel) {
       setSortModel(params.sortModel);
-    }
+    } */
   };
 
   const handlePageChange = params => {
@@ -65,7 +66,7 @@ const DataGridComponent = () => {
     detailViewChildRef.current.toggleDetailView();
   };
 
-  const {loading, error, data} = useQuery(buildQuery(), {
+  const {loading, error, data} = useQuery(buildMovieQuery(), {
     variables: {
       searchString: searchStringRedux !== undefined ? searchStringRedux : '',
       page: pageRedux,
@@ -111,13 +112,14 @@ const DataGridComponent = () => {
           rowCount={rowCount.active}
           paginationMode="server"
           onPageChange={handlePageChange}
-          sortingMode="server"
+          /* sortingMode="server"
           sortModel={sortModel}
-          onSortModelChange={handleSortModelChange}
+          onSortModelChange={handleSortModelChange} */
           onRowClick={onRowClick}
           loading={loading}
         />
       </div>
+
       <DetailViewModal
         ref={detailViewChildRef}
         detailViewParams={detailViewParams}
