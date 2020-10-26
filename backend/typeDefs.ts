@@ -102,6 +102,13 @@ export const typeDefs = gql`
     totalRowCount: Int
   }
 
+  type Review {
+    _Id: ID!
+    movie_id: String!
+    text: String!
+    author: String!
+  }
+
   type Query {
     Movie(
       searchString: String
@@ -109,15 +116,17 @@ export const typeDefs = gql`
       filter: Filter
       sort: Sort
     ): SearchResult
+
+    Reviews(movie_id: String): [Review]
   }
 
-  input Review {
+  input ReviewInput {
     movie_id: String
     text: String
     author: String
   }
 
   type Mutation {
-    addReview(review: Review): Boolean
+    addReview(review: ReviewInput): Boolean
   }
 `;
