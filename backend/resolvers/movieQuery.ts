@@ -1,8 +1,6 @@
-import { Types } from 'mongoose';
-import { MovieModel, Movie } from './models/Movie';
-import { ReviewModel, Review } from './models/Review';
+import { MovieModel, Movie } from '../models/Movie';
 
-const movieResolver = async (_, args: MovieArgs) => {
+export const movieQuery = async (_, args: MovieArgs) => {
   try {
     // Set default values, and overwrite with the args
     const searchString = args.searchString || '';
@@ -75,66 +73,6 @@ const movieResolver = async (_, args: MovieArgs) => {
   }
 };
 
-const reviewResolver = async (_, args: ReviewArgs) => {
-  try {
-    const reviews = await ReviewModel.find(
-      { movie_id: args.movie_id },
-      (err: any, reviews: Review[]) => {
-        if (err) throw err;
-        return reviews;
-      }
-    );
-
-    return reviews;
-  } catch (e) {
-    console.error(e.name + ': ' + e.message);
-    throw e;
-  }
-};
-
-const reviewMutation = async (_, args: ReviewMutationArgs) => {
-  try {
-    // Check if the recieved movie_id is a valid id
-    if (!Types.ObjectId.isValid(args.review.movie_id)) {
-      throw new TypeError('Not a valid movieID');
-    }
-
-    // Check if the movie exists in the database
-    const reviewedMovie = await MovieModel.findById(
-      args.review.movie_id,
-      (err, movie) => {
-        if (err) throw err;
-        return movie;
-      }
-    );
-
-    // If it exists, create a new review and return true if successful
-    if (!reviewedMovie) {
-      throw new Error('Not a movie in the database.');
-    } else {
-      const newReview = await ReviewModel.create({
-        movie_id: args.review.movie_id,
-        text: args.review.text,
-        author: args.review.author,
-      });
-      return newReview ? true : false;
-    }
-  } catch (e) {
-    console.error(e.name + ': ' + e.message);
-    throw e;
-  }
-};
-
-export const resolvers = {
-  Query: {
-    Movie: movieResolver,
-    Reviews: reviewResolver,
-  },
-  Mutation: {
-    addReview: reviewMutation,
-  },
-};
-
 interface MovieArgs {
   searchString?: string;
   page?: number;
@@ -151,18 +89,6 @@ interface MovieArgs {
   sort?: {
     field: string;
     direction: string;
-  };
-}
-
-interface ReviewArgs {
-  movie_id: string;
-}
-
-interface ReviewMutationArgs {
-  review: {
-    movie_id: string;
-    text: string;
-    author: string;
   };
 }
 

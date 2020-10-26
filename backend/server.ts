@@ -1,11 +1,24 @@
-const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
-const mongoose = require('mongoose');
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import mongoose from 'mongoose';
+
 import { typeDefs } from './typeDefs';
-import { resolvers } from './resolvers';
+import { movieQuery } from './resolvers/movieQuery';
+import { reviewsQuery } from './resolvers/reviewsQuery';
+import { addReviewMutation } from './resolvers/addReviewMutation';
 
 const startServer = async () => {
   const app = express();
+
+  const resolvers = {
+    Query: {
+      Movie: movieQuery,
+      Reviews: reviewsQuery,
+    },
+    Mutation: {
+      addReview: addReviewMutation,
+    },
+  };
 
   const server = new ApolloServer({ typeDefs, resolvers });
 
