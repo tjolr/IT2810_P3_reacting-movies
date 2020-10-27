@@ -43,6 +43,7 @@ const movieReducer = (state = initMovieState, action) => {
         ...state,
         page: 1,
         filter: {
+          ...state.filter,
           release_year: {
             from: action.payload.content[0],
             to: action.payload.content[1],
@@ -54,6 +55,7 @@ const movieReducer = (state = initMovieState, action) => {
         ...state,
         page: 1,
         filter: {
+          ...state.filter,
           rating: {
             from: action.payload.content[0],
             to: action.payload.content[1],
