@@ -103,7 +103,7 @@ export const typeDefs = gql`
   }
 
   type Review {
-    _Id: ID!
+    _id: ID!
     movie_id: String!
     text: String!
     author: String!
