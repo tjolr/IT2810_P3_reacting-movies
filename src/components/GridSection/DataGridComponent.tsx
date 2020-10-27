@@ -4,7 +4,7 @@ import '../../App.css';
 import {DataGrid, SortModel} from '@material-ui/data-grid';
 import {useSelector} from 'react-redux';
 import {motion} from 'framer-motion';
-import DetailViewModal from './DetailView.Modal';
+import DetailViewModal from './DetailViewSection/DetailView.Modal';
 import {useQuery} from '@apollo/client';
 import {buildMovieQuery} from '../../fetch/QueryBuilder';
 import {columnDefs} from './Columns';
@@ -52,9 +52,6 @@ const DataGridComponent = () => {
   ]);
 
   const handleSortModelChange = params => {
-    /* if (params.sortModel !== sortModel) {
-      setSortModel(params.sortModel);
-    } */
     dispatch(updateSort(params.sortModel[0]));
   };
 

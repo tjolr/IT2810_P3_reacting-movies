@@ -4,24 +4,25 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import {Typography} from '@material-ui/core';
-import {getDateInYearString} from '../../utils/dates';
-import {getLanguageName} from '../../utils/isoLanguages';
+import {getDateInYearString} from '../../../utils/dates';
+import {getLanguageName} from '../../../utils/isoLanguages';
 import {useQuery} from '@apollo/client';
-import {buildDetailMovieQuery} from '../../fetch/QueryBuilder';
-import {initMovieState} from '../../redux/reducers/movie.reducer';
+import {buildDetailMovieQuery} from '../../../fetch/QueryBuilder';
+import {initMovieState} from '../../../redux/reducers/movie.reducer';
 import Skeleton from '@material-ui/lab/Skeleton';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
+import ReviewForm from './ReviewForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     modal: {
       [theme.breakpoints.down('sm')]: {
         marginTop: '10vh',
-        overflow: 'scroll',
         maxHeight: '80vh',
         width: '97vw',
         margin: 'auto',
+        overflow: 'scroll',
       },
       [theme.breakpoints.up('md')]: {
         display: 'flex',
@@ -30,6 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     paper: {
+      overflow: 'scroll',
+
       backgroundColor: theme.palette.background.paper,
       borderRadius: '8px',
       boxShadow: theme.shadows[5],
@@ -37,7 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: theme.spacing(1),
       },
       [theme.breakpoints.up('md')]: {
-        width: '60vw',
+        minHeight: '50vh',
+        width: '40vw',
         padding: theme.spacing(4),
       },
     },
@@ -146,6 +150,13 @@ const DetailViewModal = forwardRef((props: any, ref) => {
               )}
             </div>
           )}
+
+          <br></br>
+
+          <ReviewForm
+            movieId={props.detailViewParams && props.detailViewParams._id}
+          />
+
           <IconButton
             onClick={handleClose}
             size="small"
