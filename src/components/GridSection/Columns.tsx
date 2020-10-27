@@ -3,7 +3,7 @@ import {getLanguageName} from '../../utils/isoLanguages';
 
 export const columnDefs: ColDef[] = [
   {field: 'id', hide: true},
-  {field: '_id', hide: false},
+  {field: '_id', hide: true},
   {field: 'title', headerName: 'Title', width: 250},
   {
     field: 'release_date',

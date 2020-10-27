@@ -15,19 +15,19 @@ import {motion} from 'framer-motion';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      backgroundColor: grey[100],
+      backgroundColor: theme.palette.info.dark,
       borderRadius: '8px',
       padding: theme.spacing(2),
       marginBottom: theme.spacing(1),
     },
     reviewContainer: {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.secondary.light,
       borderRadius: '8px',
       padding: theme.spacing(1),
       marginTop: theme.spacing(0.5),
     },
     allReviewsContainer: {
-      maxHeight: '10rem',
+      maxHeight: '20rem',
       overflow: 'scroll',
     },
   })
@@ -44,7 +44,7 @@ const Reviews = (props: any) => {
 
   useEffect(() => {
     refetch();
-  }, [props.newReviewCounter]);
+  }, [props.newReviewAdded]);
 
   return (
     <div className={classes.root}>

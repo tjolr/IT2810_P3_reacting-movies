@@ -10,17 +10,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       [theme.breakpoints.down('sm')]: {
-        minWidth: '80vw',
-        maxWidth: 500,
+        minWidth: '95%',
       },
       [theme.breakpoints.up('md')]: {
-        minWidth: 200,
-        maxWidth: 400,
+        width: '100%',
+      },
+      '& > h6': {
+        color: 'white',
       },
     },
     title: {
       display: 'block',
       textAlign: 'center',
+      color: 'white',
     },
     yearNumber: {
       display: 'inline-block',
@@ -51,7 +53,9 @@ const RangeSliderVoteAvg = () => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title}>Average vote:</Typography>
+      <Typography className={classes.title} color="primary">
+        Average vote:
+      </Typography>
       <Typography variant="subtitle2" className={classes.yearNumber}>
         {value[0]}
       </Typography>

@@ -21,10 +21,9 @@ const SearchField = () => {
   return (
     <div>
       <TextField
-        variant="outlined"
         className={classes.searchField}
         color="secondary"
-        label="Search movie"
+        label="Search for a movie"
         id="searchMovieField"
         onChange={e => {
           dispatch(updateSearch(e.target.value));

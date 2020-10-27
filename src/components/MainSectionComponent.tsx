@@ -8,8 +8,6 @@ import DataGridComponent from './GridSection/DataGridComponent';
 const MainSection = () => {
   return (
     <Container style={{marginBottom: '2rem'}}>
-      <Info />
-      <SearchField />
       <Filters />
       <DataGridComponent />
     </Container>

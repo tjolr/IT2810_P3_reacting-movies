@@ -10,16 +10,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       [theme.breakpoints.down('sm')]: {
-        minWidth: '80vw',
+        minWidth: '95%',
       },
       [theme.breakpoints.up('md')]: {
-        minWidth: 200,
-        maxWidth: 400,
+        width: '100%',
+      },
+      '& > h6': {
+        color: 'white',
       },
     },
     title: {
       display: 'block',
       textAlign: 'center',
+      color: 'white',
     },
     yearNumber: {
       display: 'inline-block',
