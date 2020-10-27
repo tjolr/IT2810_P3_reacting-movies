@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 500,
+      height: 700,
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -103,7 +103,7 @@ const DataGridComponent = () => {
       <div style={{height: 1000, width: '100%'}}>
         <DataGrid
           rows={loading ? [] : data.Movie.movies}
-          rowHeight={42}
+          rowHeight={52}
           columns={columnDefs}
           pagination
           pageSize={pageSize}

@@ -38,3 +38,17 @@ export const buildDetailMovieQuery = () => {
 
   return query;
 };
+
+export const buildMovieReviewsQuery = () => {
+  const query = gql`
+    query($movieId: String) {
+      Reviews(movie_id: $movieId) {
+        movie_id
+        author
+        text
+      }
+    }
+  `;
+
+  return query;
+};

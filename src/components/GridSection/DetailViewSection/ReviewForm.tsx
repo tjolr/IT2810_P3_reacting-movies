@@ -3,7 +3,7 @@ import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {TextField, Typography, Button} from '@material-ui/core';
 import {grey} from '@material-ui/core/colors';
 import SendIcon from '@material-ui/icons/Send';
-import {useMutation} from '@apollo/client';
+import {useMutation, gql} from '@apollo/client';
 import {ADD_REVIEW} from '../../../fetch/MutationBuilder';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -39,7 +39,13 @@ const ReviewForm = (props: any) => {
   const [
     addReview,
     {loading: mutationLoading, error: mutationError},
-  ] = useMutation(ADD_REVIEW);
+  ] = useMutation(ADD_REVIEW, {
+    onCompleted(data) {
+      if (data.addReview) {
+        props.handleNewReviewAdded();
+      }
+    },
+  });
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -67,7 +73,7 @@ const ReviewForm = (props: any) => {
 
   return (
     <div className={classes.root}>
-      <Typography variant="h6">Write a review:</Typography>
+      <Typography variant="subtitle1">Write a review:</Typography>
 
       <form
         className={classes.form}

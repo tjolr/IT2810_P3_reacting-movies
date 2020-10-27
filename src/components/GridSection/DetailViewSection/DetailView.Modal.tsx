@@ -1,9 +1,24 @@
-import React, {forwardRef, useImperativeHandle} from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useState,
+  useEffect,
+} from 'react';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import {Typography} from '@material-ui/core';
+import {
+  Typography,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
+  Dialog,
+  DialogTitle,
+  Button,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 import {getDateInYearString} from '../../../utils/dates';
 import {getLanguageName} from '../../../utils/isoLanguages';
 import {useQuery} from '@apollo/client';
@@ -13,38 +28,10 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import ReviewForm from './ReviewForm';
+import Reviews from './Reviews';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    modal: {
-      [theme.breakpoints.down('sm')]: {
-        marginTop: '10vh',
-        maxHeight: '80vh',
-        width: '97vw',
-        margin: 'auto',
-        overflow: 'scroll',
-      },
-      [theme.breakpoints.up('md')]: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    },
-    paper: {
-      overflow: 'scroll',
-
-      backgroundColor: theme.palette.background.paper,
-      borderRadius: '8px',
-      boxShadow: theme.shadows[5],
-      [theme.breakpoints.down('sm')]: {
-        padding: theme.spacing(1),
-      },
-      [theme.breakpoints.up('md')]: {
-        minHeight: '50vh',
-        width: '40vw',
-        padding: theme.spacing(4),
-      },
-    },
     closeButton: {
       marginTop: theme.spacing(1),
       display: 'block',
@@ -55,12 +42,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const DetailViewModal = forwardRef((props: any, ref) => {
   const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   useImperativeHandle(ref, () => ({
     toggleDetailView() {
       open ? handleClose() : handleOpen();
     },
   }));
   const [open, setOpen] = React.useState(false);
+  const [newReviewAdded, setNewReviewAdded] = useState(0);
+
+  const handleNewReviewAdded = () => {
+    setNewReviewAdded(newReviewAdded + 1);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -78,85 +73,94 @@ const DetailViewModal = forwardRef((props: any, ref) => {
   });
 
   return (
-    <Modal
-      className={classes.modal}
-      open={open}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={open}>
-        <div className={classes.paper}>
-          {props.detailViewParams && (
-            <div>
-              {props.detailViewParams.title && (
-                <Typography variant="h5">
-                  {props.detailViewParams.title}
-                </Typography>
-              )}
-              <br />
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll={'paper'}
+        fullScreen={isMobile}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle>
+          {props.detailViewParams && props.detailViewParams.title}
+        </DialogTitle>
 
-              {loading ? (
-                <div>
-                  <Skeleton animation="wave" width={450} height={22} />
-                  <br />
-                  <Skeleton animation="wave" width={200} height={22} />
-                  <Skeleton animation="wave" width={200} height={22} />
-                  <Skeleton animation="wave" width={200} height={22} />
-                  <br />
-                  <Skeleton animation="wave" height={90} />
-                  <br />
-                </div>
-              ) : (
-                <div>
-                  {props.detailViewParams.tagline && (
-                    <Typography variant="subtitle1">
-                      "<i>{props.detailViewParams.tagline}</i>"
-                    </Typography>
-                  )}
-                  <br />
+        <DialogContent dividers={true}>
+          <div>
+            {props.detailViewParams && (
+              <div>
+                {loading ? (
+                  <div>
+                    <Skeleton animation="wave" width={450} height={22} />
+                    <br />
+                    <Skeleton animation="wave" width={200} height={22} />
+                    <Skeleton animation="wave" width={200} height={22} />
+                    <Skeleton animation="wave" width={200} height={22} />
+                    <br />
+                    <Skeleton animation="wave" height={90} />
+                    <br />
+                  </div>
+                ) : error ? (
+                  <Typography variant="h6" color="error">
+                    Error while fetching details about the movie
+                  </Typography>
+                ) : (
+                  <div>
+                    {props.detailViewParams.tagline && (
+                      <Typography variant="subtitle1">
+                        "<i>{props.detailViewParams.tagline}</i>"
+                      </Typography>
+                    )}
+                    <br />
 
-                  {props.detailViewParams.release_date && (
-                    <Typography variant="subtitle1">
-                      <b>Release date:</b>{' '}
-                      {getDateInYearString(
-                        new Date(props.detailViewParams.release_date)
-                      )}
-                    </Typography>
-                  )}
-                  {props.detailViewParams.vote_average && (
-                    <Typography variant="subtitle1">
-                      <b>Average vote:</b> {props.detailViewParams.vote_average}
-                    </Typography>
-                  )}
-                  {props.detailViewParams.original_language && (
-                    <Typography variant="subtitle1">
-                      <b>Original language:</b>{' '}
-                      {getLanguageName(
-                        props.detailViewParams.original_language
-                      )}
-                    </Typography>
-                  )}
-                  <br />
-                  {data && (
-                    <Typography variant="body1">
-                      {data.Movie.movies[0].overview}
-                    </Typography>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+                    {props.detailViewParams.release_date && (
+                      <Typography variant="subtitle1">
+                        <b>Release date:</b>{' '}
+                        {getDateInYearString(
+                          new Date(props.detailViewParams.release_date)
+                        )}
+                      </Typography>
+                    )}
+                    {props.detailViewParams.vote_average && (
+                      <Typography variant="subtitle1">
+                        <b>Average vote:</b>{' '}
+                        {props.detailViewParams.vote_average}
+                      </Typography>
+                    )}
+                    {props.detailViewParams.original_language && (
+                      <Typography variant="subtitle1">
+                        <b>Original language:</b>{' '}
+                        {getLanguageName(
+                          props.detailViewParams.original_language
+                        )}
+                      </Typography>
+                    )}
+                    <br />
+                    {data && (
+                      <Typography variant="body1">
+                        {data.Movie.movies[0].overview}
+                      </Typography>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
-          <br></br>
+            <br></br>
 
-          <ReviewForm
-            movieId={props.detailViewParams && props.detailViewParams._id}
-          />
+            <Reviews
+              movieId={props.detailViewParams && props.detailViewParams._id}
+              newReviewAdded={newReviewAdded}
+            />
 
+            <ReviewForm
+              movieId={props.detailViewParams && props.detailViewParams._id}
+              handleNewReviewAdded={handleNewReviewAdded}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
           <IconButton
             onClick={handleClose}
             size="small"
@@ -164,9 +168,9 @@ const DetailViewModal = forwardRef((props: any, ref) => {
           >
             <CloseIcon />
           </IconButton>
-        </div>
-      </Fade>
-    </Modal>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 });
 
