@@ -7,10 +7,10 @@ import DataGridComponent from './GridSection/DataGridComponent';
 
 const MainSection = () => {
   return (
-    <Container style={{marginBottom: '2rem'}}>
+    <div>
       <Filters />
       <DataGridComponent />
-    </Container>
+    </div>
   );
 };
 

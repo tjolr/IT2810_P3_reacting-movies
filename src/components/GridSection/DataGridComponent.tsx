@@ -10,6 +10,7 @@ import {buildMovieQuery} from '../../fetch/QueryBuilder';
 import {columnDefs} from './Columns';
 import {useDispatch} from 'react-redux';
 import {changePage, updateSort} from '../../redux/actions';
+import {Typography} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -88,8 +89,8 @@ const DataGridComponent = () => {
   if (error)
     return (
       <div>
-        <h2>Error while loading data!</h2>
-        Reason: ${error.message}
+        <Typography variant="h4">Error while loading data!</Typography>
+        <Typography variant="h6">Reason: ${error.message}</Typography>
       </div>
     );
 

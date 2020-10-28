@@ -13,30 +13,28 @@ import MainSection from './components/MainSectionComponent';
 import Info from './components/Info';
 import {Container, withStyles} from '@material-ui/core';
 import './index.css';
-import {blue, grey, yellow, teal, green} from '@material-ui/core/colors';
+import {grey, teal, orange} from '@material-ui/core/colors';
+import Background from './assets/interstellar.jpg';
 
 const globalTheme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: yellow[400],
+      main: orange[200],
     },
     secondary: {
-      main: teal[500],
+      main: teal[400],
       dark: teal[900],
     },
     info: {
       main: grey[500],
-    },
-    error: {
-      main: green[100],
     },
   },
 });
 
 const useStyles = makeStyles({
   root: {
-    background: 'url(https://wallpaperaccess.com/full/1746017.jpg)',
+    backgroundImage: `url(${Background})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -52,13 +50,13 @@ const GlobalCss = withStyles({
     '.MuiDataGrid-root': {
       backgroundColor: 'rgba(58, 58, 58, 0.95)',
     },
-    '.MuiTablePagination-root': {},
-    '.MuiIconButton-root': {color: 'white'},
-    '.MuiContainer-root': {
+
+    '.MuiIconButton-root, .MuiTypography-root': {color: 'white'},
+    '.MuiContainer-root, .MuiContainer-maxWidthLg': {
       marginBottom: 0,
     },
-    '.MuiContainer-maxWidthLg': {
-      marginBottom: 0,
+    '.MuiContainer-maxWidthXl': {
+      maxWidth: '1500px',
     },
   },
 })(() => null);
@@ -69,7 +67,7 @@ const App = () => {
     <ThemeProvider theme={globalTheme}>
       <GlobalCss />
       <div className={classes.root}>
-        <Container>
+        <Container maxWidth="xl">
           <Info />
           <MainSection />
         </Container>

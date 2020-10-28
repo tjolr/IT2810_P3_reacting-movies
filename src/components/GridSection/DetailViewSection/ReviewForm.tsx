@@ -114,7 +114,7 @@ const ReviewForm = (props: any) => {
         </Button>
 
         {submitSuccessfull != undefined && submitSuccessfull ? (
-          <Typography variant="subtitle1" style={{color: 'green'}}>
+          <Typography variant="subtitle1" style={{color: 'lightgreen'}}>
             Review successfully saved!
           </Typography>
         ) : (

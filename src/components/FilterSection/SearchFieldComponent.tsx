@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const SearchField = () => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
 
   return (
@@ -23,7 +22,7 @@ const SearchField = () => {
       <TextField
         className={classes.searchField}
         color="secondary"
-        label="Search for a movie"
+        label="Search for a movie title"
         id="searchMovieField"
         onChange={e => {
           dispatch(updateSearch(e.target.value));
