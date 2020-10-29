@@ -8,7 +8,7 @@ export const movieQuery = async (_, args: MovieArgs) => {
     const filter = args.filter || null;
     const sort = args.sort || { field: 'popularity', direction: 'desc' };
 
-    const limit = 10;
+    const limit = 25;
 
     // Set up the basic search query
     let searchQuery: MovieSearchQuery = {
