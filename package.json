@@ -44,7 +44,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server:dev": "npx ts-node-dev --respawn --transpile-only ./backend/server.ts",
-    "server:deploy": "npx ts-node ./backend/server.ts"
+    "server:deploy": "npx ts-node ./backend/server.ts",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -62,6 +64,8 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^5.5.0",
+    "cypress-react-unit-test": "^4.16.7",
     "redux-devtools-extension": "^2.13.8"
   }
 }

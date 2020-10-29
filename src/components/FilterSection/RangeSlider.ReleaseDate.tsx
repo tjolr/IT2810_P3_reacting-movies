@@ -53,12 +53,17 @@ const RangeSliderReleaseDate = () => {
   return (
     <div className={classes.root}>
       <Typography className={classes.title}>Release year:</Typography>
-      <Typography variant="subtitle2" className={classes.yearNumber}>
+      <Typography
+        variant="subtitle2"
+        className={classes.yearNumber}
+        id="fromReleaseYear"
+      >
         {value[0]}
       </Typography>
       <Typography
         variant="subtitle2"
         className={clsx(classes.floatRight, classes.yearNumber)}
+        id="toReleaseYear"
       >
         {value[1]}
       </Typography>

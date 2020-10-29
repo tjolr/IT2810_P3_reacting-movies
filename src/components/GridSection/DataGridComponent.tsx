@@ -104,7 +104,8 @@ const DataGridComponent = () => {
       <div style={{height: 1000, width: '100%'}}>
         <DataGrid
           rows={loading ? [] : data.Movie.movies}
-          rowHeight={52}
+          rowHeight={34}
+          autoHeight={true}
           columns={columnDefs}
           pagination
           pageSize={pageSize}
