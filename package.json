@@ -34,6 +34,7 @@
     "react-scripts": "^3.4.4",
     "realm-web": "^1.0.0",
     "redux": "^4.0.5",
+    "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
     "typescript": "^3.9.7"
   },
@@ -42,7 +43,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "npx ts-node-dev --respawn --transpile-only ./backend/server.ts"
+    "server:dev": "npx ts-node-dev --respawn --transpile-only ./backend/server.ts",
+    "server:deploy": "npx ts-node ./backend/server.ts"
   },
   "eslintConfig": {
     "extends": "react-app"

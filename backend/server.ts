@@ -29,8 +29,8 @@ const startServer = async () => {
     useNewUrlParser: true,
   });
 
-  app.listen({ port: 4000 }, () => {
-    console.log(`server url: http//localhost:4000${server.graphqlPath}`);
+  app.listen({ port: 3000 }, () => {
+    console.log(`server url: http://localhost:3000${server.graphqlPath}`);
   });
 };
 
