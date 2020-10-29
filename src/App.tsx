@@ -13,18 +13,17 @@ import MainSection from './components/MainSectionComponent';
 import Info from './components/Info';
 import {Container, withStyles} from '@material-ui/core';
 import './index.css';
-import {grey, teal, orange} from '@material-ui/core/colors';
+import {grey, teal, orange, blue, amber} from '@material-ui/core/colors';
 import Background from './assets/interstellar.jpg';
 
 const globalTheme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: orange[200],
+      main: amber[400],
     },
     secondary: {
-      main: teal[400],
-      dark: teal[900],
+      main: blue[500],
     },
     info: {
       main: grey[500],
@@ -44,11 +43,9 @@ const useStyles = makeStyles({
 });
 
 const GlobalCss = withStyles({
-  // @global is handled by jss-plugin-global.
   '@global': {
-    // You should target [class*="MuiButton-root"] instead if you nest themes.
     '.MuiDataGrid-root': {
-      backgroundColor: 'rgba(58, 58, 58, 0.95)',
+      backgroundColor: 'rgba(58, 58, 58, 0.88)',
     },
 
     '.MuiIconButton-root, .MuiTypography-root': {color: 'white'},
@@ -57,6 +54,9 @@ const GlobalCss = withStyles({
     },
     '.MuiContainer-maxWidthXl': {
       maxWidth: '1500px',
+    },
+    '.MuiDataGrid-cell:hover': {
+      cursor: 'pointer',
     },
   },
 })(() => null);

@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     searchField: {
       width: '100%',
-      marginBottom: '1rem',
+      height: '100% ',
+      margin: 'auto',
     },
   })
 );
@@ -18,17 +19,15 @@ const SearchField = () => {
   const dispatch = useDispatch();
 
   return (
-    <div>
-      <TextField
-        className={classes.searchField}
-        color="secondary"
-        label="Search for a movie title"
-        id="searchMovieField"
-        onChange={e => {
-          dispatch(updateSearch(e.target.value));
-        }}
-      />
-    </div>
+    <TextField
+      className={classes.searchField}
+      color="primary"
+      label="Search for a movie title"
+      id="searchMovieField"
+      onChange={e => {
+        dispatch(updateSearch(e.target.value));
+      }}
+    />
   );
 };
 

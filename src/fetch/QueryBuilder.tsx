@@ -4,6 +4,7 @@ import {columnDefs} from '../components/GridSection/Columns';
 export const buildMovieQuery = () => {
   const fields: string[] = [];
   columnDefs.map(columnDef => fields.push(columnDef.field));
+
   const fieldString = fields.join('\n');
 
   const query = gql`
@@ -30,7 +31,11 @@ export const buildDetailMovieQuery = () => {
     query($searchString: String) {
       Movie(searchString: $searchString) {
         movies {
+          tagline
           overview
+          genres {
+            name
+          }
         }
       }
     }

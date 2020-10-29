@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import {TextField, Typography, Button} from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
 import SendIcon from '@material-ui/icons/Send';
 import {useMutation, gql} from '@apollo/client';
 import {ADD_REVIEW} from '../../../fetch/MutationBuilder';

@@ -1,7 +1,6 @@
 import React from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import RangeSlider from './RangeSlider.ReleaseDate';
-import {Typography} from '@material-ui/core';
 import RangeSliderVote from './RangeSlider.VoteAvg';
 import {motion} from 'framer-motion';
 import SearchField from './SearchFieldComponent';
@@ -9,27 +8,32 @@ import SearchField from './SearchFieldComponent';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     filterSection: {
-      backgroundColor: 'rgba(68, 68, 68, 0.95)',
+      backgroundColor: 'rgba(68, 68, 68, 0.78)',
       borderRadius: '.3rem',
-      padding: '1rem 3rem 1rem 3rem',
+      padding: '.5rem 1.5rem .5rem 1.5rem',
       marginBottom: '.5rem',
     },
     filterContainer: {
       display: 'flex',
       [theme.breakpoints.down('sm')]: {
+        '& > *:first-child': {
+          marginBottom: theme.spacing(2),
+        },
         flexDirection: 'column',
         alignItems: 'center',
       },
       [theme.breakpoints.up('md')]: {
         flexDirection: 'row',
-        justifyContent: 'space-evenly',
+        justifyContent: 'center',
       },
       [theme.breakpoints.up('md')]: {
         '& > *': {
+          flex: 1,
           marginLeft: '2rem',
           marginRight: '2rem',
           '&:first-child': {
             marginLeft: 0,
+            flex: 2,
           },
           '&:last-child': {
             marginRight: 0,
@@ -49,8 +53,8 @@ const Filters = () => {
       animate={{x: 0, opacity: 1}}
       className={classes.filterSection}
     >
-      <SearchField />
       <div className={classes.filterContainer}>
+        <SearchField />
         <RangeSlider />
         <RangeSliderVote />
       </div>

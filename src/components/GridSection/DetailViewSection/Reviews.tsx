@@ -7,7 +7,6 @@ import {
   Divider,
   CircularProgress,
 } from '@material-ui/core';
-import {grey} from '@material-ui/core/colors';
 import {buildMovieReviewsQuery} from '../../../fetch/QueryBuilder';
 import {useQuery} from '@apollo/client';
 import {motion} from 'framer-motion';
@@ -21,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     reviewContainer: {
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.secondary.main,
       borderRadius: '8px',
       padding: theme.spacing(1),
       marginTop: theme.spacing(0.5),

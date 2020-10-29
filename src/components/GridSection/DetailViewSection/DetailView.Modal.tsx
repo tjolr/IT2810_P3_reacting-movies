@@ -1,21 +1,11 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useState,
-  useEffect,
-} from 'react';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
 import {
   Typography,
-  DialogContentText,
   DialogContent,
   DialogActions,
   Dialog,
   DialogTitle,
-  Button,
   useMediaQuery,
   useTheme,
 } from '@material-ui/core';
@@ -23,7 +13,6 @@ import {getDateInYearString} from '../../../utils/dates';
 import {getLanguageName} from '../../../utils/isoLanguages';
 import {useQuery} from '@apollo/client';
 import {buildDetailMovieQuery} from '../../../fetch/QueryBuilder';
-import {initMovieState} from '../../../redux/reducers/movie.reducer';
 import Skeleton from '@material-ui/lab/Skeleton';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
@@ -107,9 +96,9 @@ const DetailViewModal = forwardRef((props: any, ref) => {
                   </Typography>
                 ) : (
                   <div>
-                    {props.detailViewParams.tagline && (
+                    {data && (
                       <Typography variant="subtitle1">
-                        "<i>{props.detailViewParams.tagline}</i>"
+                        "<i>{data.Movie.movies[0].tagline}</i>"
                       </Typography>
                     )}
                     <br />
@@ -134,6 +123,14 @@ const DetailViewModal = forwardRef((props: any, ref) => {
                         {getLanguageName(
                           props.detailViewParams.original_language
                         )}
+                      </Typography>
+                    )}
+                    {data && (
+                      <Typography variant="subtitle1">
+                        <b>Genres:</b>{' '}
+                        {data.Movie.movies[0].genres
+                          .map(genre => genre.name)
+                          .join(', ')}
                       </Typography>
                     )}
                     <br />

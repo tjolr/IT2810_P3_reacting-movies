@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
-import '../../App.css';
-import {DataGrid, SortModel} from '@material-ui/data-grid';
+import {DataGrid} from '@material-ui/data-grid';
 import {useSelector} from 'react-redux';
 import {motion} from 'framer-motion';
 import DetailViewModal from './DetailViewSection/DetailView.Modal';
@@ -11,16 +10,22 @@ import {columnDefs} from './Columns';
 import {useDispatch} from 'react-redux';
 import {changePage, updateSort} from '../../redux/actions';
 import {Typography} from '@material-ui/core';
+import '../../App.css';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 700,
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
+      [theme.breakpoints.down('sm')]: {
+        height: 400,
+      },
+      [theme.breakpoints.up('md')]: {
+        height: 'calc(100vh - 320px)',
+      },
     },
     searchField: {
       width: '50%',
@@ -32,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const DataGridComponent = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const pageSize = 10;
+  const pageSize = 25;
 
   const detailViewChildRef = useRef<any>(null);
   const [detailViewParams, setDetailViewParams] = useState(null);
@@ -47,10 +52,6 @@ const DataGridComponent = () => {
     active: 0,
     prev: 4800,
   });
-
-  const [sortModel, setSortModel] = useState<SortModel>([
-    {field: 'username', sort: 'asc'},
-  ]);
 
   const handleSortModelChange = params => {
     dispatch(updateSort(params.sortModel[0]));
@@ -101,14 +102,14 @@ const DataGridComponent = () => {
       transition={{duration: 0.6}}
       className={classes.root}
     >
-      <div style={{height: 1000, width: '100%'}}>
+      <div style={{height: '100%', width: '100%'}}>
         <DataGrid
           rows={loading ? [] : data.Movie.movies}
           rowHeight={34}
-          autoHeight={true}
           columns={columnDefs}
           pagination
           pageSize={pageSize}
+          rowsPerPageOptions={[pageSize]}
           page={pageRedux}
           rowCount={rowCount.active}
           paginationMode="server"
