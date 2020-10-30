@@ -98,6 +98,7 @@ const DataGridComponent = () => {
     }
 
     setRowCount(tmpRowCount);
+    // eslint-disable-next-line
   }, [data]);
 
   if (error)

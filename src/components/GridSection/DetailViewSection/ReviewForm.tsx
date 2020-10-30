@@ -123,12 +123,12 @@ const ReviewForm = (props: any) => {
 
         {/* Feedback messages if the review was successfully submitted or 
           if there was any errors */}
-        {submitSuccessfull != undefined && submitSuccessfull ? (
+        {submitSuccessfull !== undefined && submitSuccessfull ? (
           <Typography variant="subtitle1" style={{color: 'lightgreen'}}>
             Review successfully saved!
           </Typography>
         ) : (
-          submitSuccessfull != undefined &&
+          submitSuccessfull !== undefined &&
           mutationError && (
             <Typography variant="subtitle1" color="error">
               Error! Please try again.

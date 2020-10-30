@@ -47,6 +47,7 @@ const Reviews = (props: any) => {
   /* When a new review is added, we want to show it as a newly added review */
   useEffect(() => {
     refetch();
+    // eslint-disable-next-line
   }, [props.newReviewAdded]);
 
   return (

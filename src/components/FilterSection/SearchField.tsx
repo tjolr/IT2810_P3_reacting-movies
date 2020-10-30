@@ -9,6 +9,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     searchField: {
       margin: 'auto',
+      width: '100%',
     },
   })
 );
@@ -25,6 +26,7 @@ const SearchField = () => {
   /* Useffect runs only when debouncedSearchTerm has changed */
   useEffect(() => {
     dispatch(updateSearch(searchTerm));
+    // eslint-disable-next-line
   }, [debouncedSearchTerm]);
 
   return (

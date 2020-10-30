@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import * as Realm from 'realm-web';
 import {ApolloClient, HttpLink, InMemoryCache} from '@apollo/client';
 
