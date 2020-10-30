@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {
   createStyles,
   makeStyles,
@@ -7,9 +7,10 @@ import {
   Divider,
   CircularProgress,
 } from '@material-ui/core';
-import {buildMovieReviewsQuery} from '../../../fetch/QueryBuilder';
 import {useQuery} from '@apollo/client';
 import {motion} from 'framer-motion';
+import {grey} from '@material-ui/core/colors';
+import {MOVIE_REVIEW_QUERY} from '../../../GraphQL/QueryBuilder';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,13 +21,14 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
     reviewContainer: {
-      backgroundColor: theme.palette.secondary.main,
-      borderRadius: '8px',
+      background: `linear-gradient(45deg, ${grey[800]} 30%, ${grey[700]} 90%)`,
+      borderRadius: '5px',
       padding: theme.spacing(1),
       marginTop: theme.spacing(0.5),
     },
     allReviewsContainer: {
       maxHeight: '20rem',
+      /* Want to scroll the reviews if it surpasses maxHeight */
       overflow: 'scroll',
     },
   })
@@ -35,12 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const Reviews = (props: any) => {
   const classes = useStyles();
 
-  const {loading, error, data, refetch} = useQuery(buildMovieReviewsQuery(), {
+  /* Fetchs all reviews for the chosen movie */
+  const {loading, error, data, refetch} = useQuery(MOVIE_REVIEW_QUERY, {
     variables: {
       movieId: props.movieId,
     },
   });
 
+  /* When a new review is added, we want to show it as a newly added review */
   useEffect(() => {
     refetch();
   }, [props.newReviewAdded]);
@@ -68,9 +72,14 @@ const Reviews = (props: any) => {
       ) : (
         <motion.div className={classes.allReviewsContainer}>
           {data && data.Reviews.length > 0 ? (
-            data.Reviews.slice(0)
+            /* Filter out reviews without author or text. Should not be possible
+            to put into db, but good to have double check */
+            data.Reviews.filter(review => review.author && review.text)
+              .slice(0)
+              /* Reverses the list to show newest review on top */
               .reverse()
               .map(review => (
+                /* Animation on render */
                 <motion.div
                   initial={{y: 30, opacity: 0}}
                   animate={{y: 0, opacity: 1}}
@@ -85,8 +94,9 @@ const Reviews = (props: any) => {
                 </motion.div>
               ))
           ) : (
+            /* Tells the user if there are no reviews for this movie */
             <Typography variant="body1" style={{marginTop: '1rem'}}>
-              No reviews for this movie!
+              No reviews for this movie! Please add one below.
             </Typography>
           )}
         </motion.div>

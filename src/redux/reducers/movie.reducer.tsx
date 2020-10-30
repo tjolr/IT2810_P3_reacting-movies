@@ -6,6 +6,8 @@ import {
   UPDATE_SORT,
 } from '../actionTypes';
 
+/* Initial movie state
+Also used in the cypress testing, and therefore it needs to be exported */
 export const initMovieState = {
   searchString: '',
   page: 1,
@@ -25,6 +27,10 @@ export const initMovieState = {
   },
 };
 
+/* Movie Reducer
+Many times when filters, sorts or search is changed the user wants to 
+see the best results for its search. Therefore many times the page is 
+set to the first page. */
 const movieReducer = (state = initMovieState, action) => {
   switch (action.type) {
     case UPDATE_SEARCH_FIELD:
@@ -43,6 +49,9 @@ const movieReducer = (state = initMovieState, action) => {
         ...state,
         page: 1,
         filter: {
+          /* Important use of spread operator here
+          to also remain the nested childs of the state
+          and not replace two children with one new child */
           ...state.filter,
           release_year: {
             from: action.payload.content[0],
@@ -55,6 +64,9 @@ const movieReducer = (state = initMovieState, action) => {
         ...state,
         page: 1,
         filter: {
+          /* Important use of spread operator here
+          to also remain the nested childs of the state
+          and not replace two children with one new child */
           ...state.filter,
           rating: {
             from: action.payload.content[0],

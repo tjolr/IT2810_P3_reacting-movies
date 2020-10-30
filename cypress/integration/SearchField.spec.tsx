@@ -21,7 +21,7 @@ describe('SearchField', () => {
   it('Type in searchField updates redux state', () => {
     cy.visit('/');
     cy.get('#searchMovieField').type('Batman');
-
+    cy.wait(1000);
     cy.window()
       .its('store')
       .invoke('getState')

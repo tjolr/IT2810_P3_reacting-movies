@@ -3,7 +3,7 @@ import {makeStyles, createStyles, Theme} from '@material-ui/core/styles';
 import RangeSlider from './RangeSlider.ReleaseDate';
 import RangeSliderVote from './RangeSlider.VoteAvg';
 import {motion} from 'framer-motion';
-import SearchField from './SearchFieldComponent';
+import SearchField from './SearchField';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     filterContainer: {
       display: 'flex',
+      /* Add marginBottom on first child on small screens */
       [theme.breakpoints.down('sm')]: {
         '& > *:first-child': {
           marginBottom: theme.spacing(2),
@@ -27,10 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
         justifyContent: 'center',
       },
       [theme.breakpoints.up('md')]: {
+        /* Get all children of filterContainer */
         '& > *': {
           flex: 1,
           marginLeft: '2rem',
           marginRight: '2rem',
+          /* Remove margins on sides of the first and last child */
           '&:first-child': {
             marginLeft: 0,
             flex: 2,

@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import {useDispatch} from 'react-redux';
 import {updateRating} from '../../redux/actions';
 
+/* Much of the same comments in RangeSlider.ReleaseDate is the same here */
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -15,14 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: {
         width: '100%',
       },
-      '& > h6': {
-        color: 'white',
-      },
     },
     title: {
       display: 'block',
       textAlign: 'center',
-      color: 'white',
     },
     yearNumber: {
       display: 'inline-block',
@@ -43,19 +41,20 @@ const RangeSliderVoteAvg = () => {
 
   const [value, setValue] = useState<number[]>([0, 10]);
 
-  const handleChange = (event: any, newValue: number | number[]) => {
+  const handleChange = (event: object, newValue: number | number[]) => {
     setValue(newValue as number[]);
   };
 
-  const handleChangeCommitted = (event: any, newValue: number | number[]) => {
+  const handleChangeCommitted = (
+    event: object,
+    newValue: number | number[]
+  ) => {
     dispatch(updateRating(newValue as number[]));
   };
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title} color="primary">
-        Average vote:
-      </Typography>
+      <Typography className={classes.title}>Average vote:</Typography>
       <Typography variant="subtitle2" className={classes.yearNumber}>
         {value[0]}
       </Typography>
@@ -72,11 +71,13 @@ const RangeSliderVoteAvg = () => {
         valueLabelDisplay="auto"
         aria-labelledby="range-slider"
         getAriaValueText={valuetext}
+        /* Not a continous line function, but steps */
         step={0.5}
+        /* Marks to show lines of the steps */
         marks
         min={0.0}
         max={10.0}
-        color="secondary"
+        color="primary"
       />
     </div>
   );

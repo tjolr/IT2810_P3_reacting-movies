@@ -26,34 +26,26 @@ export const buildMovieQuery = () => {
   return query;
 };
 
-export const buildDetailMovieQuery = () => {
-  const query = gql`
-    query($searchString: String) {
-      Movie(searchString: $searchString) {
-        movies {
-          tagline
-          overview
-          genres {
-            name
-          }
+export const DETAIL_MOVIE_QUERY = gql`
+  query($searchString: String) {
+    Movie(searchString: $searchString) {
+      movies {
+        tagline
+        overview
+        genres {
+          name
         }
       }
     }
-  `;
+  }
+`;
 
-  return query;
-};
-
-export const buildMovieReviewsQuery = () => {
-  const query = gql`
-    query($movieId: String) {
-      Reviews(movie_id: $movieId) {
-        movie_id
-        author
-        text
-      }
+export const MOVIE_REVIEW_QUERY = gql`
+  query($movieId: String) {
+    Reviews(movie_id: $movieId) {
+      movie_id
+      author
+      text
     }
-  `;
-
-  return query;
-};
+  }
+`;

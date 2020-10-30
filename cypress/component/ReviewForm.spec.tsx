@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'cypress-react-unit-test';
 import ReviewForm from '../../src/components/GridSection/DetailViewSection/ReviewForm';
 import {ApolloProvider} from '@apollo/client';
-import {client} from '../../src/fetch/ApolloClient';
+import {client} from '../../src/GraphQL/ApolloClient';
 
 describe('Reviews', () => {
   it('Mounts reviewForm component', () => {
@@ -45,7 +45,7 @@ describe('Reviews', () => {
     cy.get('button[type="submit"]').should('not.be.disabled');
   });
 
-  it('Submits form, then clears input and textfield and disables button', () => {
+  it('Submits form, then clears input and textfield and disables button. Should show error message to user', () => {
     mount(
       <ApolloProvider client={client}>
         <ReviewForm />

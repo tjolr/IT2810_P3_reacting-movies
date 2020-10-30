@@ -6,6 +6,8 @@ import {
   UPDATE_SORT,
 } from './actionTypes';
 
+/* Actions for updating the movie queries */
+
 export const updateSearch = content => ({
   type: UPDATE_SEARCH_FIELD,
   payload: {
@@ -36,6 +38,7 @@ export const updateRating = content => ({
 
 export const updateSort = content => ({
   type: UPDATE_SORT,
+  /* Setting default sort if no sort is made */
   payload: {
     field: content ? content.field : 'popularity',
     sort: content ? content.sort : 'desc',

@@ -2,7 +2,7 @@ import React from 'react';
 import {mount} from 'cypress-react-unit-test';
 import Reviews from '../../src/components/GridSection/DetailViewSection/Reviews';
 import {ApolloProvider} from '@apollo/client';
-import {client} from '../../src/fetch/ApolloClient';
+import {client} from '../../src/GraphQL/ApolloClient';
 
 describe('Reviews', () => {
   it('Mounts review component', () => {

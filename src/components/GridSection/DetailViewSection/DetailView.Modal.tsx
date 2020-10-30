@@ -12,12 +12,13 @@ import {
 import {getDateInYearString} from '../../../utils/dates';
 import {getLanguageName} from '../../../utils/isoLanguages';
 import {useQuery} from '@apollo/client';
-import {buildDetailMovieQuery} from '../../../fetch/QueryBuilder';
+
 import Skeleton from '@material-ui/lab/Skeleton';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import ReviewForm from './ReviewForm';
 import Reviews from './Reviews';
+import {DETAIL_MOVIE_QUERY} from '../../../GraphQL/QueryBuilder';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,16 +33,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const DetailViewModal = forwardRef((props: any, ref) => {
   const classes = useStyles();
   const theme = useTheme();
+  /* If the user is on mobile devices, the modal gets fullscreen */
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  /* Ref hook handler. When ref.current.toggleDetailView()
+  is alled, it sets the modal to open and close if it's 
+  already open */
   useImperativeHandle(ref, () => ({
     toggleDetailView() {
       open ? handleClose() : handleOpen();
     },
   }));
   const [open, setOpen] = React.useState(false);
+  /* When the reviewForm has added a review, it notifies the reviews component */
   const [newReviewAdded, setNewReviewAdded] = useState(0);
-
   const handleNewReviewAdded = () => {
     setNewReviewAdded(newReviewAdded + 1);
   };
@@ -54,7 +59,9 @@ const DetailViewModal = forwardRef((props: any, ref) => {
     setOpen(false);
   };
 
-  const {loading, error, data} = useQuery(buildDetailMovieQuery(), {
+  /* DetailView gets some data from the dataGrid, but also fetches some more
+  data to show more detailed information about the movie. */
+  const {loading, error, data} = useQuery(DETAIL_MOVIE_QUERY, {
     variables: {
       searchString:
         props.detailViewParams != null ? props.detailViewParams.title : '',
@@ -67,6 +74,7 @@ const DetailViewModal = forwardRef((props: any, ref) => {
         open={open}
         onClose={handleClose}
         scroll={'paper'}
+        /* Fullscreen if mobile screen */
         fullScreen={isMobile}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
@@ -79,6 +87,8 @@ const DetailViewModal = forwardRef((props: any, ref) => {
           <div>
             {props.detailViewParams && (
               <div>
+                {/* When loading for fetching more detailData, skeletons are showed with
+                a wave animation. This gives the user feedback about more data is coming */}
                 {loading ? (
                   <div>
                     <Skeleton animation="wave" width={450} height={22} />
@@ -96,6 +106,7 @@ const DetailViewModal = forwardRef((props: any, ref) => {
                   </Typography>
                 ) : (
                   <div>
+                    {/* Show tagline on top */}
                     {data && (
                       <Typography variant="subtitle1">
                         "<i>{data.Movie.movies[0].tagline}</i>"
@@ -105,7 +116,7 @@ const DetailViewModal = forwardRef((props: any, ref) => {
 
                     {props.detailViewParams.release_date && (
                       <Typography variant="subtitle1">
-                        <b>Release date:</b>{' '}
+                        <b>Release date:</b> {/* Shows full Date string */}
                         {getDateInYearString(
                           new Date(props.detailViewParams.release_date)
                         )}
@@ -134,6 +145,7 @@ const DetailViewModal = forwardRef((props: any, ref) => {
                       </Typography>
                     )}
                     <br />
+                    {/* Overview text about the movie */}
                     {data && (
                       <Typography variant="body1">
                         {data.Movie.movies[0].overview}

@@ -36,7 +36,8 @@
     "redux": "^4.0.5",
     "ts-node": "^9.0.0",
     "ts-node-dev": "^1.0.0-pre.63",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "use-debounce": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

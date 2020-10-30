@@ -1,16 +1,14 @@
 import {ColDef} from '@material-ui/data-grid';
 import {getLanguageName} from '../../utils/isoLanguages';
+import {
+  currencyFormatter,
+  minutesToHourString,
+} from '../../utils/columnFormatting';
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
-const minutesToHourString = (minutes: number) => {
-  return `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
-};
-
+/* ColDef for dataGrid. */
 export const columnDefs: ColDef[] = [
+  /* Needs the id rows to pass to detailview so it can review
+  the chosen movieId */
   {field: 'id', hide: true},
   {field: '_id', hide: true},
   {field: 'title', headerName: 'Title', width: 340},
@@ -25,6 +23,7 @@ export const columnDefs: ColDef[] = [
     headerName: 'Release year',
     width: 120,
     type: 'number',
+    /* Formats the date to only show the year */
     valueFormatter: ({value}: any) => new Date(value).getFullYear(),
   },
   {
@@ -49,6 +48,7 @@ export const columnDefs: ColDef[] = [
     headerName: 'Budget',
     type: 'number',
     width: 160,
+    /* Shows a dollarsign before and .00 behind the value */
     valueFormatter: ({value}) => currencyFormatter.format(Number(value)),
   },
   {
@@ -56,13 +56,16 @@ export const columnDefs: ColDef[] = [
     headerName: 'Revenue',
     type: 'number',
     width: 160,
+    /* Shows a dollarsign before and .00 behind the value */
     valueFormatter: ({value}) => currencyFormatter.format(Number(value)),
   },
 
   {
     field: 'runtime',
     headerName: 'Runtime',
-    type: 'number',
+    type: 'string',
+    /* Shows minutes and hours instead of just minutes which is 
+    more understandable */
     valueFormatter: ({value}) => minutesToHourString(value as number),
   },
 ];

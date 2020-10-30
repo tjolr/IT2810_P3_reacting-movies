@@ -6,10 +6,12 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
 import store from './redux/store';
 import {ApolloProvider} from '@apollo/client';
-import {client} from './fetch/ApolloClient';
+import {client} from './GraphQL/ApolloClient';
 
 ReactDOM.render(
+  /* Apolloprovider so all its children can access the client */
   <ApolloProvider client={client}>
+    {/* Redux provider so all its children can access the store */}
     <Provider store={store}>
       <App />
     </Provider>
@@ -17,6 +19,8 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+/* Expose the redux store to cypress to be able 
+to test the Redux implementation */
 // @ts-ignore
 if (window.Cypress) {
   // @ts-ignore

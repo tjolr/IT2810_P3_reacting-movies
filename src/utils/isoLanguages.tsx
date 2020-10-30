@@ -1,3 +1,5 @@
+/* All code in this file is found on GitHub: https://gist.github.com/mirontoli/4722797 */
+
 export const getLanguageName = function(key) {
   key = key.slice(0, 2);
   var lang = isoLangs[key];
