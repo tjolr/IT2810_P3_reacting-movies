@@ -8,6 +8,7 @@ export const reviewsQuery = async (_, args: ReviewsArgs) => {
       throw new TypeError('Not a valid movieID');
     }
 
+    // Get the reviews that match the movie_id from the database
     const reviews = await ReviewModel.find(
       { movie_id: args.movie_id },
       (err: any, reviews: Review[]) => {

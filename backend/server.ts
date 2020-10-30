@@ -24,6 +24,8 @@ const startServer = async () => {
 
   server.applyMiddleware({ app });
 
+  // Connection to the db using localhost, as we're running
+  // the server on the same VM as the database.
   await mongoose.connect('mongodb://localhost/moviedb', {
     useUnifiedTopology: true,
     useNewUrlParser: true,

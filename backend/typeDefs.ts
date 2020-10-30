@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 
+// Typedefs for Apollo Server
 export const typeDefs = gql`
   type Genre {
     id: Int
